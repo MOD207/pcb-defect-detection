@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inspection History</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+</head>
+<body>
+  <div class="board" style="max-width: 820px;">
+    <p class="eyebrow">Inspection Log</p>
+    <h1>History</h1>
+    <p class="subtitle">All boards scanned so far, most recent first.</p>
+
+    {% if inspections %}
+      <ul class="defect-list">
+        {% for insp in inspections %}
+          <li class="defect-item" style="align-items: flex-start; padding: 16px 0;">
+            <img src="{{ url_for('static', filename='uploads/' + insp.result_filename) }}"
+                 style="width: 72px; height: 72px; object-fit: cover; border-radius: 4px; border: 1px solid var(--panel-border); flex-shrink: 0;">
+            <div style="flex: 1;">
+              <div style="display:flex; justify-content: space-between;">
+                <span>{{ insp.original_filename }}</span>
+                <span class="defect-confidence">{{ insp.timestamp }}</span>
+              </div>
+              <div style="margin-top: 6px; font-size: 12px; color: var(--text-dim);">
+                {% if insp.detections %}
+                  {% for d in insp.detections %}
+                    <span style="color: var(--defect);">●</span> {{ d.defect_class.replace('_', ' ') }} ({{ d.confidence }}){% if not loop.last %},&nbsp;{% endif %}
+                  {% endfor %}
+                {% else %}
+                  <span style="color: var(--trace);">No defects found</span>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="no-defects">No inspections logged yet.</p>
+    {% endif %}
+
+    <a href="/" class="back-link">Run a new inspection</a>
+  </div>
+</body>
+</html>

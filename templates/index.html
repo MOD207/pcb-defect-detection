@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PCB Defect Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+</head>
+<body>
+  <div class="board">
+    {% if error %}
+      <p style="color: var(--defect); font-family: 'IBM Plex Mono', monospace; font-size: 13px; margin-bottom: 16px;">{{ error }}</p>
+    {% endif %}
+    <p class="eyebrow">Automated Inspection</p>
+    <h1>PCB Defect Detector</h1>
+    <p class="subtitle">Upload a board image to scan for missing holes, mouse bites, open circuits, shorts, spurs, and spurious copper.</p>
+    <a href="/history" class="back-link" style="margin-top:0; margin-bottom: 24px; display:inline-block;">View inspection history</a>
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+      <label class="dropzone" id="dropzone" for="image-input">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l-3.75 3.75M12 9.75l3.75 3.75M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+        </svg>
+        <div class="dropzone-label"><strong>Click to upload</strong> or drag a board image here</div>
+        <div class="file-chosen" id="file-chosen"></div>
+      </label>
+      <input type="file" name="image" id="image-input" accept="image/*" required>
+      <button type="submit">Run Inspection</button>
+    </form>
+  </div>
+
+  <script>
+    const input = document.getElementById('image-input');
+    const dropzone = document.getElementById('dropzone');
+    const fileChosen = document.getElementById('file-chosen');
+
+    input.addEventListener('change', () => {
+      if (input.files.length) fileChosen.textContent = input.files[0].name;
+    });
+
+    ['dragenter', 'dragover'].forEach(evt =>
+      dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add('dragover'); })
+    );
+    ['dragleave', 'drop'].forEach(evt =>
+      dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove('dragover'); })
+    );
+    dropzone.addEventListener('drop', e => {
+      if (e.dataTransfer.files.length) {
+        input.files = e.dataTransfer.files;
+        fileChosen.textContent = input.files[0].name;
+      }
+    });
+  </script>
+</body>
+</html>

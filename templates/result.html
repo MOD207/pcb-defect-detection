@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Detection Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+</head>
+<body>
+  <div class="board">
+    <p class="eyebrow">Scan Complete</p>
+    <h1>Detection Result</h1>
+    <p class="subtitle">Annotated regions show flagged defects with model confidence.</p>
+
+    <div class="result-image-wrap">
+      <img src="{{ url_for('static', filename='uploads/' + result_image) }}" alt="Annotated PCB result">
+    </div>
+
+    <p class="section-label">Flagged Defects</p>
+    {% if detections %}
+      <ul class="defect-list">
+        {% for d in detections %}
+          <li class="defect-item">
+            <span class="defect-dot"></span>
+            <span class="defect-name">{{ d.class.replace('_', ' ') }}</span>
+            <span class="defect-confidence">conf {{ d.confidence }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="no-defects">No defects detected — board passed inspection.</p>
+    {% endif %}
+
+    <a href="/" class="back-link">Scan another board</a>
+  </div>
+</body>
+</html>
