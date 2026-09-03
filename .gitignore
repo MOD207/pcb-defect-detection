@@ -1,0 +1,14 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Uploaded images
+static/uploads/*
+!static/uploads/.gitkeep
+
+# macOS
+.DS_Store

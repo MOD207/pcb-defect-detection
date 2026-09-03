@@ -5,19 +5,21 @@ import cv2
 import mysql.connector
 from datetime import datetime
 import uuid
+from dotenv import load_dotenv
+
 
 app = Flask(__name__)
-model = YOLO("best2.pt")
+model = YOLO("best.pt")
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        port="3309",
-        user="root",      
-        password="",
-        database="pcb_inspection"
+        host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT")),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
     )
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
