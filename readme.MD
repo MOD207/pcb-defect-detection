@@ -65,7 +65,7 @@ CREATE TABLE detections (
 );
 ```
 
-Update the database connection details (host, port, user, password) in `app.py` to match your local MySQL setup.
+Update the database connection details (host, port, user, password) in  a new `.env` file to match your local MySQL setup.
 
 ## Running the app
 
